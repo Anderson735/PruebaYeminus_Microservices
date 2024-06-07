@@ -27,9 +27,17 @@ builder.Services.AddDbContext<PruebaYeminusContext>(options =>
 
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IListaDePrecioService, ListaDePrecioService>();
+builder.Services.AddScoped<IEjercicios, Ejercicios>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NuevaPolitica", app =>
+    {
+        app.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -54,6 +62,8 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.MapControllers();
+
+app.UseCors("NuevaPolitica");
 
 app.Run();
 
