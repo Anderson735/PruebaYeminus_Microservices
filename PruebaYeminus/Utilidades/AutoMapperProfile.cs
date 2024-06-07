@@ -10,7 +10,14 @@ namespace PruebaYeminus.Utilidades
         public AutoMapperProfile()
         {
             #region Producto
-            CreateMap<Producto, ProductoDTO>().ReverseMap();
+            {
+                CreateMap<Producto, ProductoDTO>()
+                    .ForMember(dest => dest.ListaDePrecios, opt => opt.MapFrom(src => src.ListaDePrecios.Select(lp => lp.Precio).ToList()));
+
+                CreateMap<ProductoDTO, Producto>()
+                    .ForMember(dest => dest.ListaDePrecios, opt => opt.MapFrom(src => src.ListaDePrecios.Select(precio => new ListaDePrecio { Precio = precio }).ToList()));
+
+            }
             #endregion
         }
     }
